@@ -20,12 +20,20 @@ class PongGame:
 
         paddle = Paddle(30, 240)
         ball = Ball(320, 240)
-
         self.all_sprites = pygame.sprite.Group(paddle, ball)
+
+        font = pygame.font.SysFont("Arial", 18, pygame.font.Font.bold)
+        quit_text = font.render("QUIT", True, (255, 255, 255))
+        quit_text_rect = quit_text.get_rect()
+        quit_text_rect.center = (self.width // 2, self.height - 30)
 
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+                    pygame.quit()
+                    self.running = False
+                    break
+                elif event.type == pygame.MOUSEBUTTONDOWN and quit_text_rect.collidepoint(event.pos):
                     pygame.quit()
                     self.running = False
                     break
@@ -36,6 +44,7 @@ class PongGame:
                 ball.speed_x = -ball.speed_x
 
             self.window.fill((0, 0, 0))
+            self.window.blit(quit_text, quit_text_rect)
             self.all_sprites.draw(self.window)
             pygame.display.flip()
             self.clock.tick(60)
